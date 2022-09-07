@@ -37,7 +37,7 @@ class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModel
             serializer = CarSerializer(locations, many=True)
             return Response(serializer.data)
         except TypeError:
-            return JsonResponse({"error": "longitude and latitude must be numbers"})
+            return JsonResponse({"error": "longitude and latitude must be numbers", "longitude": longitude, "latitude": latitude})
 
     # TODO ADD TRY-EXCEPT
     def retrieve(self, request, pk=None):
