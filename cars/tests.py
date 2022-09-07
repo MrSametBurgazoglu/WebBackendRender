@@ -12,11 +12,12 @@ class CustomerTest(TestCase):
         token = create_token(user)
         response = self.client.get("/api/cars/", {
             "latitude": "1",
-            "longtitude": "1",
+            "longitude": "1",
 
         },
                                     content_type="application/json",
                                    **{'HTTP_AUTHORIZATION': f'Token {token.key}'})
+        print(response)
         self.assertEqual(response.status_code, 200)
 
     def test_get_car_detail(self):

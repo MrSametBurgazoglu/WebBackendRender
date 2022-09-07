@@ -35,7 +35,7 @@ class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModel
             locations = get_locations_nearby_coords(latitude, longitude, radius)
             serializer = CarSerializer(locations, many=True)
             return Response(serializer.data)
-        except ValueError:
+        except TypeError:
             return JsonResponse({"error": "longitude and latitude must be numbers"})
 
     # TODO ADD TRY-EXCEPT
