@@ -26,19 +26,17 @@ class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModel
         return super(CarsViewSet, self).get_permissions()
 
     def list(self, request):
-        longtitude = request.GET.get('longtitude')
+        longitude = request.GET.get('longitude')
         latitude = request.GET.get('latitude')
         radius = 10.0
-        if longtitude and latitude:
-            try:
-                longtitude = float(longtitude)
-                latitude = float(latitude)
-                locations = get_locations_nearby_coords(latitude, longtitude, radius)
-                serializer = CarSerializer(locations, many=True)
-                return Response(serializer.data)
-            except ValueError:
-                return JsonResponse({"error": "longitude and latitude must be numbers"})
-        return JsonResponse({"error": "longitude and latitude can't be null"})
+        try:
+            longitude = float(longitude)
+            latitude = float(latitude)
+            locations = get_locations_nearby_coords(latitude, longitude, radius)
+            serializer = CarSerializer(locations, many=True)
+            return Response(serializer.data)
+        except ValueError:
+            return JsonResponse({"error": "longitude and latitude must be numbers"})
 
     # TODO ADD TRY-EXCEPT
     def retrieve(self, request, pk=None):
