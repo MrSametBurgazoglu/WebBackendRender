@@ -27,8 +27,8 @@ class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModel
 
     def list(self, request):
         print(request.data)
-        longitude = request.data('longitude')
-        latitude = request.data('latitude')
+        longitude = request.data.get('longitude')
+        latitude = request.data.get('latitude')
         radius = 10.0
         try:
             longitude = float(longitude)
