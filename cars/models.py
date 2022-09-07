@@ -1,7 +1,4 @@
 from django.db import models
-#from django.contrib.gis.db import models as geo_models
-#from django.contrib.gis.geos import Point
-
 
 class Pricing(models.Model):
     minute = models.FloatField(default=0)
@@ -14,11 +11,6 @@ class Location(models. Model):
     location_text = models.CharField(verbose_name="Full Location", max_length=256)
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
-    #point = geo_models.PointField(blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        #self.point = Point(float(self.longitude), float(self.latitude), srid=4326)
-        super(Location, self).save(*args, **kwargs)
 
 
 # get : brand, model, segment, year, fuel_type, price_minute, price_hour, passenger_capacity, gear_type, locations

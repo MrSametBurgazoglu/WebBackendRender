@@ -1,18 +1,16 @@
-from django.db.models import F
-from django.db.models.functions import ACos, Cos, Radians
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User, Group
+from django.shortcuts import get_object_or_404
+
 from rest_framework import viewsets, mixins
-from rest_framework import permissions
-from cars.serializers import CarSerializer, CarDetailSerializer
-from cars.models import Car
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+
+from cars.serializers import CarSerializer, CarDetailSerializer
+from cars.models import Car
 from cars.utils import get_locations_nearby_coords
+
 
 class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):  # TODO-ERROR FIX THIS
     permission_classes = [IsAuthenticated]
@@ -20,30 +18,22 @@ class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModel
     serializer_class = CarSerializer
     queryset = Car.objects.all()
 
-    '''
     def get_permissions(self):
-        
-        print(self.action, "action")
-        if self.action in ["list", "update", "destroy", "partial update", "change state"]:
+        if self.action in ["create", "update", "destroy", "partial update", "change state"]:
             self.permission_classes = [IsAuthenticated]
         else:#create
             self.permission_classes = [AllowAny]
         return super(CarsViewSet, self).get_permissions()
-    '''
 
     def list(self, request):
         longtitude = request.GET.get('longtitude')
         latitude = request.GET.get('latitude')
         radius = 10.0
-        queryset = Car.objects.filter(active=False)
         if longtitude and latitude:
             try:
                 longtitude = float(longtitude)
                 latitude = float(latitude)
-                locations = get_locations_nearby_coords(latitude, longtitude, 10)
-                #cars_near = queryset.filter(car__location__point__distance_lt=
-                #                            (Point(longtitude, latitude), Distance(m=radius)),
-                #                            )
+                locations = get_locations_nearby_coords(latitude, longtitude, radius)
                 serializer = CarSerializer(locations, many=True)
                 return Response(serializer.data)
             except ValueError:

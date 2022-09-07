@@ -50,21 +50,28 @@ class BlackListMember(models.Model):
 
 
 class Customer(models.Model):
+    name = models.CharField(verbose_name="İsim Soyisim", max_length=64)
+
+    phone = models.CharField(max_length=15)  # django phonenumber field
+    email = models.EmailField(max_length=128)
+
     payment_method = models.OneToOneField(PaymentMethod, on_delete=models.CASCADE, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    plate_licence = models.OneToOneField(PlateLicence, on_delete=models.CASCADE, null=True, blank=True)
-    full_name = models.CharField(verbose_name="İsim Soyisim", max_length=64)
+
+    driver_licence = models.OneToOneField(PlateLicence, on_delete=models.CASCADE, null=True, blank=True)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
+    #location = models.OneToOneField(Location, on_delete=models.CASCADE, null=True, blank=True)
+    cars = models.ManyToManyField(Car, through='Journey')  # TODO RECONSIDER THIS OPTION
+
+    approved = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
     photo = models.ImageField(verbose_name="A photo of car", upload_to=None, height_field=None, width_field=None,
                               max_length=100, null=True, blank=True)
-    full_address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
-    location = models.OneToOneField(Location, on_delete=models.CASCADE, null=True, blank=True)
-    cars = models.ManyToManyField(Car, through='Journey')  # TODO RECONSIDER THIS OPTION
-    phone_number = models.CharField(max_length=15)  # django phonenumber field
-    email = models.EmailField(max_length=128)
-    approved = models.BooleanField(default=False)
-    active_user = models.BooleanField(default=False)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     #penalty = models.ForeignKey(Penalty, on_delete=models.CASCADE, null=True)
     #campaign_code = models.ManyToManyField(Campaign) # campaign class
+    #history
 
     def __str__(self):
         return str(self.user)
@@ -80,5 +87,3 @@ class Journey(models.Model):
     end_location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="end_location")
     user = models.ForeignKey(Customer, on_delete=models.PROTECT)
     car = models.ForeignKey(Car, on_delete=models.PROTECT)
-
-# Create your models here.
