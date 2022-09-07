@@ -27,6 +27,8 @@ class CarsViewSet(viewsets.ViewSet, mixins.CreateModelMixin, mixins.DestroyModel
 
     def list(self, request):
         print(request.GET)
+        print(request.json())
+        print(request.body())
         longitude = request.GET.get('longitude')
         latitude = request.GET.get('latitude')
         radius = 10.0
