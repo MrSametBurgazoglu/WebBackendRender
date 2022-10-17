@@ -2,7 +2,7 @@
 
 Araç Kiralama Web Backend
 
-API url:https://bitirmeprojesi.onrender.com/api/
+API url:https://carrentrestwebbackendapi.onrender.com/api/
 
 # User işlemleri
 
